@@ -44,7 +44,7 @@ if __name__=='__main__':
         scrambler4=['R', 'Z', 'C', 'V', 'Y', 'W', 'F', 'L', 'G', 'I', 'S', 'Q', 'U', 'A', 'M', 'O', 'K', 'D', 'N', 'B', 'P', 'X', 'T', 'H', 'E', 'J']
         scrambler5=['Y', 'V', 'R', 'E', 'Q', 'L', 'Z', 'J', 'S', 'T', 'X', 'G', 'M', 'W', 'I', 'O', 'K', 'B', 'N', 'U', 'H', 'P', 'D', 'C', 'A', 'F']
         reflector={'A': 'J', 'J': 'A', 'B': 'O', 'O': 'B', 'C': 'V', 'V': 'C', 'D': 'Q', 'Q': 'D', 'E': 'M', 'M': 'E', 'F': 'R', 'R': 'F', 'G': 'H', 'H': 'G', 'I': 'P', 'P': 'I', 'K': 'Z', 'Z': 'K', 'L': 'Y', 'Y': 'L', 'N': 'T', 'T': 'N', 'U': 'S', 'S': 'U', 'X': 'W', 'W': 'X'}
-        plugboard={'M': 'J', 'J': 'M', 'A': 'K', 'K': 'A', 'E': 'P', 'P':'E', 'H': 'R', 'R': 'H', 'W': 'O', 'O': 'W', 'Q': 'U', 'U': 'Q', 'R': 'T', 'T': 'R', 'B': 'C', 'C': 'B', 'L': 'S', 'S':'L', 'I': 'F', 'F': 'I'}
+        plugboard={'M': 'J', 'J': 'M', 'A': 'K', 'K': 'A', 'E': 'P', 'P':'E', 'H': 'R', 'R': 'H', 'W': 'O', 'O': 'W', 'Q': 'U', 'U': 'Q', 'Z': 'T', 'T': 'Z', 'B': 'C', 'C': 'B', 'L': 'S', 'S':'L', 'I': 'F', 'F': 'I'}
         alphabet=alphabetArray()
         cipherText=""
         n=int(input("Enter the first rotor configuration:"))%26
