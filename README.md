@@ -1,4 +1,4 @@
 # Enigma
 
 ## Emigma simulator with 5 rotor configurations and plugboard.  
-Just a classic German enigma with custom rotor wirings
+A classic German enigma with custom rotor wirings and a custom plugboard.
