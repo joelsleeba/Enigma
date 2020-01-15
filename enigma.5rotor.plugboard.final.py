@@ -1,6 +1,5 @@
 def alphabetArray(): #forAlphabetArray
         alphabet=[]
-        
         for i in range(97,123,1):
                 alphabet.append(str.upper(chr(i)))
 
@@ -9,7 +8,6 @@ def alphabetArray(): #forAlphabetArray
 
 def textAlone(rawText): #givesOutputWithoutWhitespacesAndNumbers
         rawTextCopy=""
-
         for i in range(0,len(rawText),1):
                 if str.isalpha(rawText[i]):
                         rawTextCopy+=rawText[i]
@@ -22,7 +20,7 @@ def rotorIn(wiring,config,pos):
         rotorInPos=(config+pos)%26
         rotorOut=wiring[rotorInPos]
         rotorOutPos=(alphabet.index(rotorOut)-config)%26
-
+        
         return rotorOutPos
 
 
