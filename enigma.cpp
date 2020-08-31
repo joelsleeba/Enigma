@@ -65,7 +65,6 @@ class Rotor{
         }
         outpos = (((tempos-pos)%26)+26)%26;
 
-        incPos();
         return index[outpos];
     }
 };
