@@ -6,6 +6,7 @@ class Rotor{
     string data;
     string index = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
     int pos;
+
     public:
     Rotor(string a, int b): data(a){
         pos = b%26;
@@ -17,22 +18,11 @@ class Rotor{
     }
 
     void incPos(){
-        pos = pos+1;
-        if (pos>=26){
-            pos = 0;
-            try{
-                cout<<"before inc"<<endl;
-                (this+1)->incPos();
-                cout<<"after inc"<<endl;
-            }
-            catch(...){
-                cout<<"exception caught"<<endl;
-            }
-        }
+        pos = (pos+1)%26;
     }
-    
-    void setPos(int newpos){
-        pos = newpos%26;
+
+    int getPos(){
+        return pos;
     }
 
     char textIn(char text){
@@ -53,8 +43,6 @@ class Rotor{
             }
         }
         outpos = (((tempos-pos)%26)+26)%26;
-
-        incPos();
         return index[outpos];
     }
 
@@ -80,6 +68,41 @@ class Rotor{
         incPos();
         return index[outpos];
     }
+};
+
+class Gear{
+    Rotor r1, r2, r3, r4, r5;
+    Rotor rot[5] = {r1, r2, r3, r4, r5};
+
+    void updatePos(){
+        for(int i = 0; i<5; i++){
+            rot[i].incPos();
+            if (rot[i].getPos() != 0){
+                break;
+            }
+        }
+    }
+
+    public:
+ Gear(const Rotor &a, const Rotor &b, const Rotor &c, Rotor &d, Rotor &e): r1(a), r2(b), r3(c), r4(d), r5(e) {}
+
+    char In(char txt){
+        char temp = txt;
+        for(int i = 0; i<5; i++){
+            temp = rot[i].textIn(temp);
+        }
+        return temp;
+    }
+
+    char Out(char txt){
+        char temp = txt;
+        for(int i = 4; i>-1; i--){
+            temp = rot[i].textOut(temp);
+        }
+        updatePos();
+        return temp;
+    }
+
 };
 
 
@@ -152,7 +175,7 @@ class Reflector : public PlugBoard{
 class Enigma{
     Reflector refl;
     PlugBoard plug;
-    Rotor r1, r2, r3, r4, r5;
+    Gear rotMeter;
 
     string txtalone(const string &text){
         string temp = "";
@@ -162,6 +185,7 @@ class Enigma{
         }
         return temp;
     }
+
     string upper(string &text){
         string temp = "";
         for(int i = 0; i< text.length(); i++){
@@ -171,7 +195,7 @@ class Enigma{
     }
 
     public:
-    Enigma(Rotor &a, Rotor &b, Rotor &c, Rotor &d, Rotor &e, PlugBoard &f, Reflector &g): r1(a), r2(b), r3(c), r4(d), r5(e), plug(f), refl(g){}
+    Enigma(Gear &a, const PlugBoard &b, const Reflector &c): rotMeter(a), plug(b), refl(c){}
 
     string encrypt(string text){
         string cipher = "";
@@ -180,17 +204,9 @@ class Enigma{
         text = upper(text);
         for(int i = 0; i<text.length(); i++){
             temp = plug.inputMap(text[i]);
-            temp = r1.textIn(temp);
-            temp = r2.textIn(temp);
-            temp = r3.textIn(temp);
-            temp = r4.textIn(temp);
-            temp = r5.textIn(temp);
+            temp = rotMeter.In(temp);
             temp = refl.inputMap(temp);
-            temp = r5.textOut(temp);
-            temp = r4.textOut(temp);
-            temp = r3.textOut(temp);
-            temp = r2.textOut(temp);
-            temp = r1.textOut(temp);
+            temp = rotMeter.Out(temp);
             temp = plug.inputMap(temp);
             cipher += temp;
         }
@@ -200,7 +216,11 @@ class Enigma{
 
 
 int main(){
-    const string rotorData[5] = {"ZLRVAKNPTYQCESIHFUWMBOGJDX", "CFKJRHPTMQNLOUVBZDXWESYGAI", "TXNLQIHWBJERAMUPVDFZGOCKYS", "RZCVYWFLGISQUAMOKDNBPXTHEJ", "YVREQLZJSTXGMWIOKBNUHPDCAF"};
+    const string rotorData[5] = {"ZLRVAKNPTYQCESIHFUWMBOGJDX",
+                                 "CFKJRHPTMQNLOUVBZDXWESYGAI", 
+                                 "TXNLQIHWBJERAMUPVDFZGOCKYS", 
+                                 "RZCVYWFLGISQUAMOKDNBPXTHEJ", 
+                                 "YVREQLZJSTXGMWIOKBNUHPDCAF"};
     const string plug1 = "AMRTHQXEGY";
     const string plug2 = "XRMQETAHYG";
     const string refl1 = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
@@ -208,16 +228,18 @@ int main(){
     string text, crypt;
     int pos[5];
     for(int i = 0; i<5; i++){
-        cout<<"Enter the configuration of rotor "<<i<<" :";
+        cout<<"Enter the initial position of rotor "<<i+1<<" :";
         cin>>pos[i];
     }
     Rotor r1(rotorData[0], pos[0]), r2(rotorData[1], pos[1]), r3(rotorData[2], pos[2]), r4(rotorData[3], pos[3]), r5(rotorData[4], pos[4]);
+    Gear rotMeter(r1, r2, r3, r4, r5);
     PlugBoard plug(plug1, plug2);
     Reflector refl(refl1, refl2);
-    Enigma engine(r1, r2, r3, r4, r5, plug, refl);
+    Enigma engine(rotMeter, plug, refl);
     cout<<"Enter the string to input:";
-    cin>>text;
+    cin.clear(); cin.ignore(1000,'\n');
+    getline(cin, text);
     crypt = engine.encrypt(text);
-    cout<<crypt;
+    cout<<crypt<<endl;
     return 0;
 }
