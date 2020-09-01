@@ -177,7 +177,7 @@ class Enigma{
     PlugBoard plug;
     Reflector refl;
 
-    string txtalone(const string &text){
+    static string txtalone(const string &text){
         string temp = "";
         for(unsigned int i = 0; i<text.length(); i++){
             if (isalpha(text[i]))
@@ -186,7 +186,7 @@ class Enigma{
         return temp;
     }
 
-    string upper(string &text){
+    static string upper(string &text){
         string temp = "";
         for(unsigned int i = 0; i< text.length(); i++){
             temp += toupper(text[i]);
