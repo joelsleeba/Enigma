@@ -26,9 +26,9 @@ class Rotor{
     }
 
     char textIn(char text){
-        int inpos, outpos, tempos;
+        int inpos, outpos, tempos = 0;
         char tempchar;
-        for(int i = 0; i<index.length(); i++){
+        for(unsigned int i = 0; i<index.length(); i++){
             if (text == index[i]){
                 tempos = i;
                 break;
@@ -36,7 +36,7 @@ class Rotor{
         }
         inpos = (tempos+pos)%26;
         tempchar = data[inpos];
-        for(int i = 0; i<index.length(); i++){
+        for(unsigned int i = 0; i<index.length(); i++){
             if (tempchar == index[i]){
                 tempos = i;
                 break;
@@ -47,9 +47,9 @@ class Rotor{
     }
 
     char textOut(char text){
-        int inpos, outpos, tempos;
+        int inpos, outpos, tempos = 0;
         char tempchar;
-        for(int i = 0; i<index.length(); i++){
+        for(unsigned int i = 0; i<index.length(); i++){
             if (text == index[i]){
                 tempos = i;
                 break;
@@ -57,7 +57,7 @@ class Rotor{
         }
         inpos = (tempos+pos)%26;
         tempchar = index[inpos];
-        for(int i = 0; i<data.length(); i++){
+        for(unsigned int i = 0; i<data.length(); i++){
             if (tempchar == data[i]){
                 tempos = i;
                 break;
@@ -112,7 +112,7 @@ class PlugBoard{
     PlugBoard(const string &a, const string &b) : data1(a), data2(b){}
 
     char inputMap(char text){
-        for(int i = 0; i<data1.length(); i++){
+        for(unsigned int i = 0; i<data1.length(); i++){
             if (data1[i] == text)
             return data2[i];
         }
@@ -120,7 +120,7 @@ class PlugBoard{
     }
 
     char outputMap(char text){
-        for(int i = 0; i<data2.length(); i++){
+        for(unsigned int i = 0; i<data2.length(); i++){
             if (data2[i] == text)
             return data1[i];
         }
@@ -130,8 +130,8 @@ class PlugBoard{
     string inputMap(const string &text){
         string temp = "";
         bool flag = true;
-        for (int j = 0; j<text.length(); j++){
-            for(int i = 0; i<data1.length(); i++){
+        for (unsigned int j = 0; j<text.length(); j++){
+            for(unsigned int i = 0; i<data1.length(); i++){
                 if (data1[i] == text[j]){
                     temp += data2[i];
                     flag = false;
@@ -148,8 +148,8 @@ class PlugBoard{
     string outputMap(const string &text){
         string temp = "";
         bool flag = true;
-        for (int j = 0; j<text.length(); j++){
-            for(int i = 0; i<data2.length(); i++){
+        for (unsigned int j = 0; j<text.length(); j++){
+            for(unsigned int i = 0; i<data2.length(); i++){
                 if (data2[i] == text[j]){
                     temp += data1[i];
                     flag = false;
@@ -172,22 +172,23 @@ class Reflector : public PlugBoard{
 };
 
 class Enigma{
-    Reflector refl;
-    PlugBoard plug;
-    Gear rotMeter;
 
-    static string txtalone(const string &text){
+    Gear rotMeter;
+    PlugBoard plug;
+    Reflector refl;
+
+    string txtalone(const string &text){
         string temp = "";
-        for(int i = 0; i<text.length(); i++){
+        for(unsigned int i = 0; i<text.length(); i++){
             if (isalpha(text[i]))
                 temp += text[i];
         }
         return temp;
     }
 
-    static string upper(string &text){
+    string upper(string &text){
         string temp = "";
-        for(int i = 0; i< text.length(); i++){
+        for(unsigned int i = 0; i< text.length(); i++){
             temp += toupper(text[i]);
         }
         return temp;
@@ -201,7 +202,7 @@ class Enigma{
         char temp;
         text = txtalone(text);
         text = upper(text);
-        for(int i = 0; i<text.length(); i++){
+        for(unsigned int i = 0; i<text.length(); i++){
             temp = plug.inputMap(text[i]);
             temp = rotMeter.In(temp);
             temp = refl.inputMap(temp);
@@ -226,8 +227,11 @@ int main(){
     const string refl2 = "LROGPMDKQNHAFJCEIBWZXYSUVT";
     string text, crypt;
     int pos[5];
+    
+    cout<<"Welcome to the 5 rotorclassic german enigma"<<endl;
+    cout<<"===========================================\n\n"<<endl;
     for(int i = 0; i<5; i++){
-        cout<<"Enter the initial position of rotor "<<i+1<<" :";
+        cout<<"Enter the initial position of rotor "<<i+1<<" (a number between 1 and 26) :";
         cin>>pos[i];
     }
     Rotor r1(rotorData[0], pos[0]), r2(rotorData[1], pos[1]), r3(rotorData[2], pos[2]), r4(rotorData[3], pos[3]), r5(rotorData[4], pos[4]);
@@ -235,10 +239,11 @@ int main(){
     PlugBoard plug(plug1, plug2);
     Reflector refl(refl1, refl2);
     Enigma engine(rotMeter, plug, refl);
-    cout<<"Enter the string to input:";
+    cout<<"Enter the string to encrypt:";
     cin.clear(); cin.ignore(1000,'\n');
     getline(cin, text);
     crypt = engine.encrypt(text);
+    cout<<"\nEncrypted Text"<<endl;
     cout<<crypt<<endl;
     return 0;
 }
